@@ -8,13 +8,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       sendResponse({ status: 'generating' })
     } else {
       sendResponse({ status: 'starting' })
-      generateSummary(message.url)
+      generateSummary(message.url, message.length)
     }
     return true
   }
 })
 
-async function generateSummary(url: string) {
+async function generateSummary(url: string, length: string) {
   console.log('Generating summary')
   try {
     summarizingInProgress = true
@@ -49,7 +49,7 @@ async function generateSummary(url: string) {
       sharedContext: 'This is a scientific article',
       type: 'tl;dr' as const,
       format: 'markdown' as const,
-      length: 'medium' as const,
+      length: length as 'short' | 'medium' | 'long',
     }
 
     try {

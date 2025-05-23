@@ -10,22 +10,38 @@
   <div class="container">
     <h1>Article Summarizer</h1>
     <div id="summary-container">
-      <div id="loading-container" class="hidden">
+      <div id="loading-container" class="hidden fade-in">
         <div class="loader"></div>
-        <p>Generating summary...</p>
+        <p>Generating summary with Gemini Nano...</p>
       </div>
 
-      <div id="default-message" class="message-box">
+      <div id="default-message" class="message-box fade-in">
+        <span class="material-symbols-rounded icon-primary">description</span>
         <p>Navigate to an article page and the extension will generate a summary for you.</p>
       </div>
 
-      <div id="summary-content" class="hidden">
-        <h2>Summary</h2>
-        <p id="summary-text" class="summary-box"></p>
+      <div id="summary-content" class="hidden fade-in">
+        <div class="summary-header">
+          <h2>Summary</h2>
+          <div class="chip">AI Generated</div>
+        </div>
+        <div id="summary-text" class="summary-box"></div>
       </div>
     </div>
 
-    <button id="refreshButton">Refresh Summary</button>
+    <div id="length-options" class="hidden fade-in">
+      <label for="length-select">Summary Length:</label>
+      <select id="length-select">
+        <option value="short">Short</option>
+        <option value="medium">Medium</option>
+        <option value="long">Long</option>
+      </select>
+    </div>
+
+    <button id="refreshButton">
+      <span class="material-symbols-rounded">refresh</span>
+      Refresh Summary
+    </button>
   </div>
   <script src="popup.js"></script>
 </body>

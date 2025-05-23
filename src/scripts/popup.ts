@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const loadingContainer = document.getElementById('loading-container') as HTMLDivElement
   const summaryContent = document.getElementById('summary-content') as HTMLDivElement
   const summaryText = document.getElementById('summary-text') as HTMLUListElement
+  const lengthOptions = document.getElementById('length-options') as HTMLDivElement
+  const lengthSelect = document.getElementById('length-select') as HTMLSelectElement
 
   let currentSummary: string | null = null
   let summarizing = false
@@ -19,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadingContainer.classList.add('hidden')
     defaultMessage.classList.add('hidden')
     summaryContent.classList.remove('hidden')
+    lengthOptions.classList.remove('hidden')
     summaryText.textContent = summary
     currentSummary = summary
     summarizing = false
@@ -28,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadingContainer.classList.add('hidden')
     summaryContent.classList.add('hidden')
     defaultMessage.classList.remove('hidden')
+    lengthOptions.classList.add('hidden')
     currentSummary = null
     summarizing = false
   }
@@ -64,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return
       }
 
-      chrome.tabs.sendMessage(activeTab.id, { action: 'getSummary', url: activeTab.url }, (response) => {
+      chrome.tabs.sendMessage(activeTab.id, { action: 'getSummary', url: activeTab.url, length: lengthSelect.value }, (response) => {
         if (chrome.runtime.lastError || !response) {
           console.log('Failed to get summary')
           console.log(chrome.runtime.lastError)
@@ -127,6 +131,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     requestSummary(true)
   })
+
+  lengthSelect.addEventListener('change', () => {
+    console.log('Summary length changed to:', lengthSelect.value)
+    localStorage.setItem('summaryLength', lengthSelect.value)
+    requestSummary()
+  })
+
+  lengthSelect.value = localStorage.getItem('summaryLength') || 'medium'
 
   requestSummary()
 })
