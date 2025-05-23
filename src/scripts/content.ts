@@ -19,7 +19,9 @@ async function generateSummary(url: string, length: string) {
   try {
     summarizingInProgress = true
 
-    const articles = document.querySelectorAll('article') ?? document.querySelectorAll('main')
+    const articleElements = document.querySelectorAll('article')
+    const articles =
+      articleElements.length > 0 ? articleElements : document.querySelectorAll('main')
 
     if (articles.length === 0) {
       console.error('No article or main element found')
@@ -75,7 +77,7 @@ async function generateSummary(url: string, length: string) {
         })
         summarizerInstance = await summarizer.create({
           monitor(m) {
-            m.addEventListener('downloadprogress', (e: SummarizerProgressEvent) => {
+            m.addEventListener('downloadprogress', (e) => {
               console.log(`Downloaded ${e.loaded * 100}%`)
               chrome.runtime.sendMessage({
                 action: 'downloadModel',
@@ -83,7 +85,7 @@ async function generateSummary(url: string, length: string) {
                 progress: Math.floor(e.loaded * 100),
               })
             })
-          }
+          },
         })
         chrome.runtime.sendMessage({
           action: 'downloadModel',
