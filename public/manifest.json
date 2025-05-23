@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Article Summarizer",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "An Article Summarizer Chrome extension using local AI model",
   "action": {
     "default_popup": "popup.html",
