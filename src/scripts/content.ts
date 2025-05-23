@@ -1,5 +1,3 @@
-const TurndownService = require('turndown')
-
 let summarizingInProgress = false
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -77,9 +75,6 @@ async function generateSummary(url: string) {
         })
         await summarizerInstance.ready
       }
-
-      const turndownService = new TurndownService()
-      const markdown = turndownService.turndown(article)
 
       const summary = await summarizerInstance.summarize(text)
       console.log(`Summary: ${summary}`)
