@@ -19,15 +19,19 @@ async function generateSummary(url: string, length: string) {
   try {
     summarizingInProgress = true
 
-    const article = document.querySelector("article") ?? document.querySelector("main")
+    const articles = document.querySelectorAll('article') ?? document.querySelectorAll('main')
 
-    if (!article) {
+    if (articles.length === 0) {
       console.error('No article or main element found')
       summarizingInProgress = false
       return
     }
 
-    const text = article.innerText
+    const text = Array.from(articles).reduce(
+      (longest, article) => article.innerText.length > longest.length ? article.innerText : longest,
+      ''
+    )
+
     if (!text) {
       console.error('Article has no text content')
       summarizingInProgress = false
