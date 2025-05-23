@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
   lengthSelect.addEventListener('change', () => {
     console.log('Summary length changed to:', lengthSelect.value)
     localStorage.setItem('summaryLength', lengthSelect.value)
-    requestSummary()
+    requestSummary(true)
   })
 
   lengthSelect.value = localStorage.getItem('summaryLength') || 'medium'
