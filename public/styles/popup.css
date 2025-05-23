@@ -203,6 +203,10 @@ button:active:before {
   transition: all var(--md-transition-emphasized);
 }
 
+#loading-text {
+  text-align: center;
+}
+
 .loader {
   border: 3px solid var(--md-surface-container-high);
   border-top: 3px solid var(--md-tertiary);
