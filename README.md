@@ -15,8 +15,9 @@ This API is currently in preview, which means it may change before the stable re
 
 - Built with [Bun](https://bun.sh)
 - Written in TypeScript
-- Local summarization using Gemini Nano
 - Real-time updates with watch mode
+- Local summarization using Gemini Nano
+- Summarization length selection
 
 ## 🔧 Installation
 
@@ -60,6 +61,5 @@ This will create a `dist` directory containing the built extension.
 
 1. Detects when you're reading an article
 2. Uses Gemini Nano to create a summary locally on your device
-3. Displays key points in a clean, readable format
+3. Displays a summary in the given length
 4. Keeps your data private - all processing happens on your machine
-
