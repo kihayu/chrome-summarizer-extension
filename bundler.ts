@@ -46,6 +46,7 @@ const buildScripts = async () => {
       outdir: buildDir,
       target: 'browser',
       format: 'esm',
+      minify: true,
     })
 
     if (!result.success) {
