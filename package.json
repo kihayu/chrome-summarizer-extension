@@ -18,10 +18,8 @@
   "scripts": {
     "build": "bun run bundler.ts",
     "dev": "bun run build --watch",
-    "lint": "eslint . --ext .ts",
-    "lint:fix": "eslint . --ext .ts --fix",
-    "format": "prettier --write 'src/**/*.{ts,tsx}'",
-    "check-format": "prettier --check 'src/**/*.{ts,tsx}'"
+    "lint": "eslint . --ext .ts && prettier --check 'src/**/*.{ts,tsx}'",
+    "lint:fix": "eslint . --ext .ts --fix && prettier --write 'src/**/*.{ts,tsx}'"
   },
   "type": "module"
 }
