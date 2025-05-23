@@ -47,6 +47,18 @@ bun run dev
 
 This will create a `dist` directory containing the built extension.
 
+## 🧹 Linting and Formatting
+
+This project uses ESLint v9 and Prettier for code quality and formatting:
+
+```bash
+# Check for linting issues
+bun run lint
+
+# Fix linting issues automatically where possible
+bun run lint:fix
+```
+
 ## 🔌 Loading the Extension in Chrome
 
 1. Open Chrome and navigate to `chrome://extensions`
