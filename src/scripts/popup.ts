@@ -62,7 +62,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return
       }
 
-      if (!refresh && localStorage.getItem('summary') && localStorage.getItem('url') === activeTab.url) {
+      if (
+        !refresh &&
+        localStorage.getItem('summary') &&
+        localStorage.getItem('url') === activeTab.url
+      ) {
         console.log('Showing cached summary')
         summaryText.textContent = ''
         updateSummary(localStorage.getItem('summary')!)
@@ -71,22 +75,26 @@ document.addEventListener('DOMContentLoaded', () => {
         return
       }
 
-      chrome.tabs.sendMessage(activeTab.id, { action: 'getSummary', url: activeTab.url, length: lengthSelect.value }, (response) => {
-        if (chrome.runtime.lastError || !response) {
-          console.log('Failed to get summary')
-          console.log(chrome.runtime.lastError)
+      chrome.tabs.sendMessage(
+        activeTab.id,
+        { action: 'getSummary', url: activeTab.url, length: lengthSelect.value },
+        (response) => {
+          if (chrome.runtime.lastError || !response) {
+            console.log('Failed to get summary')
+            console.log(chrome.runtime.lastError)
+            showDefaultMessage()
+            return
+          }
+
+          if (response.status === 'generating') {
+            console.log('Summary is generating')
+            return
+          }
+
+          console.log('Summary is not complete')
           showDefaultMessage()
-          return
         }
-
-        if (response.status === 'generating') {
-          console.log('Summary is generating')
-          return
-        }
-
-        console.log('Summary is not complete')
-        showDefaultMessage()
-      })
+      )
     })
   }
 
@@ -126,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
           console.log('Unknown status:', message.status)
           break
       }
-    // This part is currently not tested as to lack of testing environment
+      // This part is currently not tested as to lack of testing environment
     } else if (message.action === 'downloadModel') {
       switch (message.status) {
         case 'start_download':
@@ -136,11 +144,13 @@ document.addEventListener('DOMContentLoaded', () => {
           summarizing = true
           break
         case 'downloading':
-          loadingContainer.querySelector('p')!.textContent = `Downloading model... ${message.progress}%`
+          loadingContainer.querySelector('p')!.textContent =
+            `Downloading model... ${message.progress}%`
           break
         case 'downloaded':
           console.log('Model downloaded')
-          loadingContainer.querySelector('p')!.textContent = 'Generating summary using on device AI...'
+          loadingContainer.querySelector('p')!.textContent =
+            'Generating summary using on device AI...'
           requestSummary(true)
           break
         default:

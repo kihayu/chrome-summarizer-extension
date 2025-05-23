@@ -36,7 +36,7 @@ copyPublicFiles(publicDir, buildDir)
 
 const buildScripts = async () => {
   const scriptsDir = path.join(sourceDir, 'scripts')
-  const tsFiles = fs.readdirSync(scriptsDir).filter(file => file.endsWith('.ts'))
+  const tsFiles = fs.readdirSync(scriptsDir).filter((file) => file.endsWith('.ts'))
 
   for (const file of tsFiles) {
     const srcPath = path.join(scriptsDir, file)
@@ -97,7 +97,7 @@ async function watchFiles() {
 const success = await runBuild()
 
 if (watchMode && success) {
-  watchFiles().catch(error => {
+  watchFiles().catch((error) => {
     console.error('Watcher error:', error)
     process.exit(1)
   })

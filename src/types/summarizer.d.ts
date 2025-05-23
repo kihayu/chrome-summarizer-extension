@@ -16,9 +16,18 @@ interface SummarizerSummarizeOptions {
 interface Summarizer {
   ready: Promise<void>
   summarize(text: string, options?: SummarizerSummarizeOptions): Promise<string>
-  summarizeStreaming(text: string, options?: SummarizerSummarizeOptions): Promise<AsyncIterable<string>>
-  addEventListener(event: 'downloadprogress', callback: (event: SummarizerProgressEvent) => void): void
-  removeEventListener(event: 'downloadprogress', callback: (event: SummarizerProgressEvent) => void): void
+  summarizeStreaming(
+    text: string,
+    options?: SummarizerSummarizeOptions
+  ): Promise<AsyncIterable<string>>
+  addEventListener(
+    event: 'downloadprogress',
+    callback: (event: SummarizerProgressEvent) => void
+  ): void
+  removeEventListener(
+    event: 'downloadprogress',
+    callback: (event: SummarizerProgressEvent) => void
+  ): void
 }
 
 interface SummarizerConstructor {

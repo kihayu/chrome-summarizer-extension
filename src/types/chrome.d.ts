@@ -1,16 +1,24 @@
+/* eslint-disable */
 interface Chrome {
   runtime: {
     sendMessage: (message: any, responseCallback?: (response: any) => void) => void
     onMessage: {
-      addListener: (callback: (message: any, sender: any, sendResponse: (response: any) => void) => void) => void
-      removeListener: (callback: (message: any, sender: any, sendResponse: (response: any) => void) => void) => void
+      addListener: (
+        callback: (message: any, sender: any, sendResponse: (response: any) => void) => void
+      ) => void
+      removeListener: (
+        callback: (message: any, sender: any, sendResponse: (response: any) => void) => void
+      ) => void
     }
     lastError?: {
       message: string
     }
   }
   tabs: {
-    query: (queryInfo: { active: boolean, currentWindow: boolean }, callback: (tabs: Tab[]) => void) => void
+    query: (
+      queryInfo: { active: boolean; currentWindow: boolean },
+      callback: (tabs: Tab[]) => void
+    ) => void
     sendMessage: (tabId: number, message: any, responseCallback?: (response: any) => void) => void
   }
 }
@@ -24,4 +32,4 @@ interface Tab {
   windowId: number
 }
 
-declare var chrome: Chrome
+declare let chrome: Chrome

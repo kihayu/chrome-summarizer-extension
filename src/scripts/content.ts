@@ -28,7 +28,8 @@ async function generateSummary(url: string, length: string) {
     }
 
     const text = Array.from(articles).reduce(
-      (longest, article) => article.innerText.length > longest.length ? article.innerText : longest,
+      (longest, article) =>
+        article.innerText.length > longest.length ? article.innerText : longest,
       ''
     )
 
@@ -44,7 +45,7 @@ async function generateSummary(url: string, length: string) {
       chrome.runtime.sendMessage({
         action: 'updateSummary',
         status: 'error',
-        error: 'Summarizer API is not available in this browser'
+        error: 'Summarizer API is not available in this browser',
       })
       return
     }
@@ -59,7 +60,7 @@ async function generateSummary(url: string, length: string) {
     try {
       chrome.runtime.sendMessage({
         action: 'updateSummary',
-        status: 'generating'
+        status: 'generating',
       })
 
       const summarizer: SummarizerConstructor | null = self.Summarizer!
@@ -71,14 +72,14 @@ async function generateSummary(url: string, length: string) {
       } else {
         summarizerInstance = await summarizer.create(options)
         chrome.runtime.sendMessage({
-          action: 'start_download'
+          action: 'start_download',
         })
         summarizerInstance.addEventListener('downloadprogress', (e) => {
           console.log(`Downloaded ${e.loaded * 100}%`)
           chrome.runtime.sendMessage({
             action: 'downloadModel',
             status: 'downloading',
-            progress: e.loaded * 100
+            progress: e.loaded * 100,
           })
         })
         await summarizerInstance.ready
@@ -91,7 +92,7 @@ async function generateSummary(url: string, length: string) {
           action: 'updateSummary',
           summary: chunk,
           url: url,
-          status: 'add_chunk'
+          status: 'add_chunk',
         })
       }
 
@@ -101,7 +102,7 @@ async function generateSummary(url: string, length: string) {
         action: 'updateSummary',
         summary: summary,
         url: url,
-        status: 'complete'
+        status: 'complete',
       })
     } catch (error) {
       console.error('Error initializing Summarizer:')
@@ -111,7 +112,7 @@ async function generateSummary(url: string, length: string) {
       chrome.runtime.sendMessage({
         action: 'updateSummary',
         status: 'error',
-        error: error instanceof Error ? error.message : String(error)
+        error: error instanceof Error ? error.message : String(error),
       })
     }
   } catch (error) {
@@ -121,7 +122,7 @@ async function generateSummary(url: string, length: string) {
     chrome.runtime.sendMessage({
       action: 'updateSummary',
       status: 'error',
-      error: error instanceof Error ? error.message : String(error)
+      error: error instanceof Error ? error.message : String(error),
     })
   }
 }
