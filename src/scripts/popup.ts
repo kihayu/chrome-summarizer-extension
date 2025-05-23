@@ -7,24 +7,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const lengthOptions = document.getElementById('length-options') as HTMLDivElement
   const lengthSelect = document.getElementById('length-select') as HTMLSelectElement
 
-  let currentSummary: string | null = null
+  let currentSummary: string = ''
   let summarizing = false
 
   const showLoading = () => {
+    currentSummary = ''
+    summaryText.textContent = ''
     defaultMessage.classList.add('hidden')
     summaryContent.classList.add('hidden')
     loadingContainer.classList.remove('hidden')
     summarizing = true
   }
 
-  const showSummary = (summary: string) => {
+  const showSummary = () => {
     loadingContainer.classList.add('hidden')
     defaultMessage.classList.add('hidden')
     summaryContent.classList.remove('hidden')
     lengthOptions.classList.remove('hidden')
-    summaryText.textContent = summary
-    currentSummary = summary
-    summarizing = false
+  }
+
+  const updateSummary = (chunk: string) => {
+    currentSummary += chunk
+    summaryText.textContent = currentSummary
   }
 
   const showDefaultMessage = () => {
@@ -32,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     summaryContent.classList.add('hidden')
     defaultMessage.classList.remove('hidden')
     lengthOptions.classList.add('hidden')
-    currentSummary = null
+    currentSummary = ''
     summarizing = false
   }
 
@@ -64,7 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (!refresh && localStorage.getItem('summary') && localStorage.getItem('url') === activeTab.url) {
         console.log('Showing cached summary')
-        showSummary(localStorage.getItem('summary')!)
+        currentSummary = ''
+        summaryText.textContent = ''
+        updateSummary(localStorage.getItem('summary')!)
+        showSummary()
         return
       }
 
@@ -94,10 +101,16 @@ document.addEventListener('DOMContentLoaded', () => {
       switch (message.status) {
         case 'complete':
           console.log('Showing summary, hiding loader')
-          showSummary(message.summary)
           sendResponse({ received: true })
-          localStorage.setItem('summary', message.summary)
+          localStorage.setItem('summary', currentSummary)
           localStorage.setItem('url', message.url)
+          summarizing = false
+          break
+        case 'add_chunk':
+          console.log('Adding summary chunk')
+          sendResponse({ received: true })
+          updateSummary(message.summary)
+          showSummary()
           break
         case 'generating':
           console.log('Showing loader')

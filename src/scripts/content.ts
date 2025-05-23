@@ -76,8 +76,16 @@ async function generateSummary(url: string, length: string) {
         await summarizerInstance.ready
       }
 
-      const summary = await summarizerInstance.summarize(text)
-      console.log(`Summary: ${summary}`)
+      const summary = await summarizerInstance.summarizeStreaming(text)
+
+      for await (const chunk of summary) {
+        chrome.runtime.sendMessage({
+          action: 'updateSummary',
+          summary: chunk,
+          url: url,
+          status: 'add_chunk'
+        })
+      }
 
       summarizingInProgress = false
 
