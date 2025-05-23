@@ -3,46 +3,46 @@
 
 :root {
   /* Primary palette */
-  --md-primary: #6750A4;
-  --md-primary-container: #EADDFF;
-  --md-on-primary: #FFFFFF;
-  --md-on-primary-container: #21005E;
+  --md-primary: #6750a4;
+  --md-primary-container: #eaddff;
+  --md-on-primary: #ffffff;
+  --md-on-primary-container: #21005e;
 
   /* Secondary palette */
-  --md-secondary: #9A82DB;
-  --md-secondary-container: #E8DEF8;
-  --md-on-secondary: #FFFFFF;
-  --md-on-secondary-container: #1D192B;
+  --md-secondary: #9a82db;
+  --md-secondary-container: #e8def8;
+  --md-on-secondary: #ffffff;
+  --md-on-secondary-container: #1d192b;
 
   /* Tertiary palette - expressive accent */
-  --md-tertiary: #CCA4FF;
-  --md-tertiary-container: #E8DEF8;
-  --md-on-tertiary: #FFFFFF;
-  --md-on-tertiary-container: #1D192B;
+  --md-tertiary: #cca4ff;
+  --md-tertiary-container: #e8def8;
+  --md-on-tertiary: #ffffff;
+  --md-on-tertiary-container: #1d192b;
 
   /* Surface colors */
-  --md-surface: #FEF7FF;
-  --md-surface-dim: #DED8E1;
-  --md-surface-container: #F3EDF7;
-  --md-surface-bright: #FEF7FF;
-  --md-surface-container-lowest: #FFFFFF;
-  --md-surface-container-low: #F7F2FA;
-  --md-surface-container-high: #ECE6F0;
-  --md-surface-container-highest: #E6E0E9;
+  --md-surface: #fef7ff;
+  --md-surface-dim: #ded8e1;
+  --md-surface-container: #f3edf7;
+  --md-surface-bright: #fef7ff;
+  --md-surface-container-lowest: #ffffff;
+  --md-surface-container-low: #f7f2fa;
+  --md-surface-container-high: #ece6f0;
+  --md-surface-container-highest: #e6e0e9;
 
   /* Surface content */
-  --md-on-surface: #1D1B20;
-  --md-on-surface-variant: #49454F;
+  --md-on-surface: #1d1b20;
+  --md-on-surface-variant: #49454f;
 
   /* Outline */
-  --md-outline: #79747E;
-  --md-outline-variant: #CAC4D0;
+  --md-outline: #79747e;
+  --md-outline-variant: #cac4d0;
 
   /* Error palette */
-  --md-error: #B3261E;
-  --md-error-container: #F9DEDC;
-  --md-on-error: #FFFFFF;
-  --md-on-error-container: #410E0B;
+  --md-error: #b3261e;
+  --md-error-container: #f9dedc;
+  --md-on-error: #ffffff;
+  --md-on-error-container: #410e0b;
 
   /* Elevations */
   --md-elevation-1: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15);
@@ -218,9 +218,15 @@ button:active:before {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg) scale(1); }
-  50% { transform: rotate(180deg) scale(1.1); }
-  100% { transform: rotate(360deg) scale(1); }
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.1);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
 }
 
 .hidden {
@@ -231,7 +237,8 @@ button:active:before {
   margin: 0 0 16px 0;
 }
 
-#summary-text ul, #summary-text ol {
+#summary-text ul,
+#summary-text ol {
   margin-top: 0;
   margin-bottom: 16px;
   padding-left: 24px;
@@ -241,7 +248,8 @@ button:active:before {
   margin-bottom: 8px;
 }
 
-#summary-text strong, #summary-text b {
+#summary-text strong,
+#summary-text b {
   font-weight: 600;
   color: var(--md-on-surface);
 }
@@ -261,13 +269,23 @@ button:active:before {
 }
 
 @keyframes slideIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .fade-in {
@@ -288,7 +306,11 @@ button:active:before {
   direction: ltr;
   -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
-  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
 }
 
 .icon-primary {
@@ -370,7 +392,9 @@ select:hover {
 
 select:focus {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(103, 80, 164, 0.3), var(--md-elevation-1);
+  box-shadow:
+    0 0 0 2px rgba(103, 80, 164, 0.3),
+    var(--md-elevation-1);
   background-color: var(--md-primary-container);
   filter: brightness(1.08);
 }
