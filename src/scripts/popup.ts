@@ -134,7 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
           console.log('Unknown status:', message.status)
           break
       }
-      // This part is currently not tested as to lack of testing environment
     } else if (message.action === 'downloadModel') {
       switch (message.status) {
         case 'start_download':
