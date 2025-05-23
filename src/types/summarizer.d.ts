@@ -1,7 +1,7 @@
 interface SummarizerOptions {
   sharedContext?: string
-  type?: 'summary' | 'key-points' | 'paragraph'
-  format?: 'text' | 'markdown' | 'html'
+  type?: 'tl;dr' | 'teaser' | 'key-points' | 'headline'
+  format?: 'plain-text' | 'markdown'
   length?: 'short' | 'medium' | 'long'
 }
 
