@@ -1,0 +1,116 @@
+const TurndownService = require('turndown')
+
+let summarizingInProgress = false
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  console.log('Content script received message:', message)
+  if (message.action === 'getSummary') {
+    console.log(`Summarizing in progress: ${summarizingInProgress}`)
+    if (summarizingInProgress) {
+      sendResponse({ status: 'generating' })
+    } else {
+      sendResponse({ status: 'starting' })
+      generateSummary(message.url)
+    }
+    return true
+  }
+})
+
+async function generateSummary(url: string) {
+  console.log('Generating summary')
+  try {
+    summarizingInProgress = true
+
+    const article = document.querySelector("article") ?? document.querySelector("main")
+
+    if (!article) {
+      console.error('No article or main element found')
+      summarizingInProgress = false
+      return
+    }
+
+    const text = article.innerHTML
+    if (!text) {
+      console.error('Article has no text content')
+      summarizingInProgress = false
+      return
+    }
+
+    if (!('Summarizer' in self)) {
+      console.error('Summarizer API not available in this browser')
+      summarizingInProgress = false
+      chrome.runtime.sendMessage({
+        action: 'updateSummary',
+        status: 'error',
+        error: 'Summarizer API is not available in this browser'
+      })
+      return
+    }
+
+    const options = {
+      sharedContext: 'This is a scientific article',
+      type: 'key-points' as const,
+      format: 'markdown' as const,
+      length: 'medium' as const,
+    }
+
+    try {
+      chrome.runtime.sendMessage({
+        action: 'updateSummary',
+        status: 'generating'
+      })
+
+      const summarizer = self.Summarizer!
+      const availability = await summarizer.availability()
+      let summarizerInstance
+
+      if (availability === 'available') {
+        summarizerInstance = await summarizer.create(options)
+      } else {
+        summarizerInstance = await summarizer.create(options)
+        summarizerInstance.addEventListener('downloadprogress', (e) => {
+          console.log(`Downloaded ${e.loaded * 100}%`)
+          chrome.runtime.sendMessage({
+            action: 'updateSummary',
+            status: 'generating'
+          })
+        })
+        await summarizerInstance.ready
+      }
+
+      const turndownService = new TurndownService()
+      const markdown = turndownService.turndown(article)
+
+      const summary = await summarizerInstance.summarize(markdown)
+      console.log(`Summary: ${summary}`)
+
+      summarizingInProgress = false
+
+      chrome.runtime.sendMessage({
+        action: 'updateSummary',
+        summary: summary,
+        url: url,
+        status: 'complete'
+      })
+    } catch (error) {
+      console.error('Error initializing Summarizer:')
+      console.error(error)
+      summarizingInProgress = false
+
+      chrome.runtime.sendMessage({
+        action: 'updateSummary',
+        status: 'error',
+        error: error instanceof Error ? error.message : String(error)
+      })
+    }
+  } catch (error) {
+    console.error('Error in content script:', error)
+    summarizingInProgress = false
+
+    chrome.runtime.sendMessage({
+      action: 'updateSummary',
+      status: 'error',
+      error: error instanceof Error ? error.message : String(error)
+    })
+  }
+}

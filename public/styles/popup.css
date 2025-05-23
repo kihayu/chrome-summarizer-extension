@@ -1,0 +1,128 @@
+body {
+  font-family: Arial, sans-serif;
+  width: 380px;
+  padding: 16px;
+  background-color: #f8f9fa;
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+h1 {
+  color: #3740ff;
+  margin-bottom: 16px;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+h2 {
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 1.2rem;
+}
+
+button {
+  background-color: #3740ff;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 16px 0;
+  font-size: 14px;
+  align-self: center;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #2930cc;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+#summary-container {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.message-box {
+  background-color: #e9ecef;
+  border-radius: 4px;
+  padding: 16px;
+  text-align: center;
+  color: #495057;
+}
+
+.summary-box {
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+  padding: 1rem 2rem;
+  text-align: left;
+  max-height: 300px;
+  overflow-y: auto;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Loader styling */
+#loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.loader {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3740ff;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Markdown styling */
+#summary-text p {
+  margin: 0 0 12px 0;
+}
+
+#summary-text ul, #summary-text ol {
+  margin-top: 0;
+  padding-left: 20px;
+}
+
+#summary-text li {
+  margin-bottom: 4px;
+}
+
+#summary-text strong, #summary-text b {
+  font-weight: 600;
+}
+
+/* Error message styling */
+.error-message {
+  margin-top: 12px;
+  padding: 10px;
+  background-color: #ffe6e6;
+  border-left: 3px solid #ff3333;
+  color: #cc0000;
+  border-radius: 3px;
+  font-size: 13px;
+}

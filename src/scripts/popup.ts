@@ -1,0 +1,137 @@
+document.addEventListener('DOMContentLoaded', () => {
+  const refreshButton = document.getElementById('refreshButton') as HTMLButtonElement
+  const defaultMessage = document.getElementById('default-message') as HTMLDivElement
+  const loadingContainer = document.getElementById('loading-container') as HTMLDivElement
+  const summaryContent = document.getElementById('summary-content') as HTMLDivElement
+  const summaryText = document.getElementById('summary-text') as HTMLUListElement
+
+  let currentSummary: string | null = null
+  let summarizing = false
+
+  const showLoading = () => {
+    defaultMessage.classList.add('hidden')
+    summaryContent.classList.add('hidden')
+    loadingContainer.classList.remove('hidden')
+    summarizing = true
+  }
+
+  const showSummary = (summary: string) => {
+    loadingContainer.classList.add('hidden')
+    defaultMessage.classList.add('hidden')
+    summaryContent.classList.remove('hidden')
+    const summaryList = summary.replaceAll('* ', '').split('\n')
+    summaryList.map((item) => {
+      const li = document.createElement('li')
+      li.textContent = item
+      summaryText.appendChild(li)
+    })
+    currentSummary = summary
+    summarizing = false
+  }
+
+  const showDefaultMessage = () => {
+    loadingContainer.classList.add('hidden')
+    summaryContent.classList.add('hidden')
+    defaultMessage.classList.remove('hidden')
+    currentSummary = null
+    summarizing = false
+  }
+
+  const requestSummary = () => {
+    console.log('Requesting summary')
+    showLoading()
+
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs.length === 0) {
+        console.log('No active tab found')
+        showDefaultMessage()
+        return
+      }
+
+      const activeTab = tabs[0]
+      console.log('Active tab info:', { id: activeTab?.id, url: activeTab?.url })
+
+      if (!activeTab || !activeTab.id) {
+        console.log('Active tab is not valid or missing ID')
+        showDefaultMessage()
+        return
+      }
+
+      if (activeTab.url && activeTab.url.startsWith('chrome://')) {
+        console.log('Cannot access chrome:// URLs')
+        showDefaultMessage()
+        return
+      }
+
+      if (localStorage.getItem('summary') && localStorage.getItem('url') === activeTab.url) {
+        console.log('Showing cached summary')
+        showSummary(localStorage.getItem('summary')!)
+        return
+      }
+
+      chrome.tabs.sendMessage(activeTab.id, { action: 'getSummary', url: activeTab.url }, (response) => {
+        if (chrome.runtime.lastError || !response) {
+          console.log('Failed to get summary')
+          console.log(chrome.runtime.lastError)
+          showDefaultMessage()
+          return
+        }
+
+        if (response.status === 'generating') {
+          console.log('Summary is generating')
+          return
+        }
+
+        console.log('Summary is not complete')
+        showDefaultMessage()
+      })
+    })
+  }
+
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    console.log('Popup received message:', message)
+
+    if (message.action === 'updateSummary') {
+      switch (message.status) {
+        case 'complete':
+          console.log('Showing summary, hiding loader')
+          showSummary(message.summary)
+          sendResponse({ received: true })
+          localStorage.setItem('summary', message.summary)
+          localStorage.setItem('url', message.url)
+          break
+        case 'generating':
+          console.log('Showing loader')
+          showLoading()
+          sendResponse({ received: true })
+          break
+        case 'error':
+          console.log('Showing error')
+          showDefaultMessage()
+          const errorDiv = document.createElement('div')
+          errorDiv.className = 'error-message'
+          errorDiv.textContent = `Error: ${message.error || 'Unknown error'}`
+          defaultMessage.appendChild(errorDiv)
+          sendResponse({ received: true })
+          break
+        default:
+          console.log('Unknown status:', message.status)
+          break
+      }
+    }
+
+    return true
+  })
+
+  refreshButton.addEventListener('click', () => {
+    console.log('Refreshing summary')
+    if (summarizing) {
+      console.log('Summarizing in progress, cannot refresh')
+      return
+    }
+
+    requestSummary()
+  })
+
+  requestSummary()
+})
