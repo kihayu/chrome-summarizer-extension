@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     summarizing = false
   }
 
-  const requestSummary = () => {
+  const requestSummary = (refresh = false) => {
     console.log('Requesting summary')
     showLoading()
 
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return
       }
 
-      if (localStorage.getItem('summary') && localStorage.getItem('url') === activeTab.url) {
+      if (!refresh && localStorage.getItem('summary') && localStorage.getItem('url') === activeTab.url) {
         console.log('Showing cached summary')
         showSummary(localStorage.getItem('summary')!)
         return
@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return
     }
 
-    requestSummary()
+    requestSummary(true)
   })
 
   requestSummary()

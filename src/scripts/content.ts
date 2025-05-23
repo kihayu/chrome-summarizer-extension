@@ -29,7 +29,7 @@ async function generateSummary(url: string) {
       return
     }
 
-    const text = article.innerHTML
+    const text = article.innerText
     if (!text) {
       console.error('Article has no text content')
       summarizingInProgress = false
@@ -81,7 +81,7 @@ async function generateSummary(url: string) {
       const turndownService = new TurndownService()
       const markdown = turndownService.turndown(article)
 
-      const summary = await summarizerInstance.summarize(markdown)
+      const summary = await summarizerInstance.summarize(text)
       console.log(`Summary: ${summary}`)
 
       summarizingInProgress = false
