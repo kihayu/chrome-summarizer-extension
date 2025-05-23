@@ -7,7 +7,8 @@ A Chrome extension that summarizes articles on device using Gemini Nano.
 **The Summarizer API is not yet generally available and requires:**
 
 - Chrome 138 or newer (expected release: Jun 18, 2025)
-- Registration to the [Chrome Early Preview Program](https://developer.chrome.com/docs/ai/built-in#early-preview)
+- Registration to the [Early Preview Program](https://developer.chrome.com/docs/ai/built-in#early-preview)
+  - If enrolled in EEP, Summarize API is also available in stable Chrome
 
 This API is currently in preview, which means it may change before the stable release. The Summarizer API has been available for early preview since August 2024.
 
