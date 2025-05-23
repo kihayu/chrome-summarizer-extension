@@ -67,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
         summaryText.textContent = ''
         updateSummary(localStorage.getItem('summary')!)
         showSummary()
+        summarizing = false
         return
       }
 
