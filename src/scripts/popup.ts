@@ -150,8 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
         case 'downloaded':
           console.log('Model downloaded')
           loadingContainer.querySelector('p')!.textContent =
-            'Generating summary using on device AI...'
-          requestSummary(true)
+            'Generating summary using on device AI. The first summary may take a while.'
           break
         default:
           console.log('Unknown status:', message.status)

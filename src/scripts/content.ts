@@ -69,20 +69,35 @@ async function generateSummary(url: string, length: string) {
 
       if (availability === 'available') {
         summarizerInstance = await summarizer.create(options)
-      } else {
-        summarizerInstance = await summarizer.create(options)
+      } else if (availability === 'downloadable') {
         chrome.runtime.sendMessage({
           action: 'start_download',
         })
-        summarizerInstance.addEventListener('downloadprogress', (e) => {
-          console.log(`Downloaded ${e.loaded * 100}%`)
-          chrome.runtime.sendMessage({
-            action: 'downloadModel',
-            status: 'downloading',
-            progress: e.loaded * 100,
-          })
+        summarizerInstance = await summarizer.create({
+          monitor(m) {
+            m.addEventListener('downloadprogress', (e: SummarizerProgressEvent) => {
+              console.log(`Downloaded ${e.loaded * 100}%`)
+              chrome.runtime.sendMessage({
+                action: 'downloadModel',
+                status: 'downloading',
+                progress: Math.floor(e.loaded * 100),
+              })
+            })
+          }
         })
+        chrome.runtime.sendMessage({
+          action: 'downloadModel',
+          status: 'downloaded',
+        })
+
         await summarizerInstance.ready
+      } else {
+        chrome.runtime.sendMessage({
+          action: 'updateSummary',
+          status: 'error',
+          error: 'Something went wrong. Check DevTools Console for more information.',
+        })
+        return
       }
 
       const summary = await summarizerInstance.summarizeStreaming(text)

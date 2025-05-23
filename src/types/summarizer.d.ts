@@ -3,6 +3,7 @@ interface SummarizerOptions {
   type?: 'tl;dr' | 'teaser' | 'key-points' | 'headline'
   format?: 'plain-text' | 'markdown'
   length?: 'short' | 'medium' | 'long'
+  monitor?: (m: Summarizer) => void
 }
 
 interface SummarizerProgressEvent extends Event {
