@@ -1,6 +1,6 @@
 # 📝 Article Summarizer Chrome Extension
 
-A Chrome extension that summarizes articles on device using Gemini Nano.
+A Chrome extension that summarizes articles using on device AI.
 
 ## ⚠️ Important Note
 
@@ -20,7 +20,7 @@ This API is currently in preview, which means it may change before the stable re
 - Built with [Bun](https://bun.sh)
 - Written in TypeScript
 - Real-time updates with watch mode
-- Local summarization using Gemini Nano
+- Local summarization using on device AI model
 - Summarization length selection
 
 ## 🔧 Installation
@@ -64,6 +64,6 @@ This will create a `dist` directory containing the built extension.
 ## 🧩 How It Works
 
 1. Detects when you're reading an article
-2. Uses Gemini Nano to create a summary locally on your device
+2. Uses Summarizer API to create a summary locally on your device
 3. Displays a summary in the given length
 4. Keeps your data private - all processing happens on your machine
