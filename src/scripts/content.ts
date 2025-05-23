@@ -58,19 +58,23 @@ async function generateSummary(url: string, length: string) {
         status: 'generating'
       })
 
-      const summarizer = self.Summarizer!
+      const summarizer: SummarizerConstructor | null = self.Summarizer!
       const availability = await summarizer.availability()
-      let summarizerInstance
+      let summarizerInstance: Summarizer | null = null
 
       if (availability === 'available') {
         summarizerInstance = await summarizer.create(options)
       } else {
         summarizerInstance = await summarizer.create(options)
+        chrome.runtime.sendMessage({
+          action: 'start_download'
+        })
         summarizerInstance.addEventListener('downloadprogress', (e) => {
           console.log(`Downloaded ${e.loaded * 100}%`)
           chrome.runtime.sendMessage({
-            action: 'updateSummary',
-            status: 'generating'
+            action: 'downloadModel',
+            status: 'downloading',
+            progress: e.loaded * 100
           })
         })
         await summarizerInstance.ready

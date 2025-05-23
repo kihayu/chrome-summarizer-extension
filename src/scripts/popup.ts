@@ -7,11 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const lengthOptions = document.getElementById('length-options') as HTMLDivElement
   const lengthSelect = document.getElementById('length-select') as HTMLSelectElement
 
-  let currentSummary: string = ''
   let summarizing = false
 
   const showLoading = () => {
-    currentSummary = ''
     summaryText.textContent = ''
     defaultMessage.classList.add('hidden')
     summaryContent.classList.add('hidden')
@@ -27,8 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const updateSummary = (chunk: string) => {
-    currentSummary += chunk
-    summaryText.textContent = currentSummary
+    summaryText.append(chunk)
   }
 
   const showDefaultMessage = () => {
@@ -36,7 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
     summaryContent.classList.add('hidden')
     defaultMessage.classList.remove('hidden')
     lengthOptions.classList.add('hidden')
-    currentSummary = ''
     summarizing = false
   }
 
@@ -68,7 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (!refresh && localStorage.getItem('summary') && localStorage.getItem('url') === activeTab.url) {
         console.log('Showing cached summary')
-        currentSummary = ''
         summaryText.textContent = ''
         updateSummary(localStorage.getItem('summary')!)
         showSummary()
@@ -102,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
         case 'complete':
           console.log('Showing summary, hiding loader')
           sendResponse({ received: true })
-          localStorage.setItem('summary', currentSummary)
+          localStorage.setItem('summary', summaryText.innerText)
           localStorage.setItem('url', message.url)
           summarizing = false
           break
@@ -125,6 +120,27 @@ document.addEventListener('DOMContentLoaded', () => {
           errorDiv.textContent = `Error: ${message.error || 'Unknown error'}`
           defaultMessage.appendChild(errorDiv)
           sendResponse({ received: true })
+          break
+        default:
+          console.log('Unknown status:', message.status)
+          break
+      }
+    // This part is currently not tested as to lack of testing environment
+    } else if (message.action === 'downloadModel') {
+      switch (message.status) {
+        case 'start_download':
+          console.log('Downloading model')
+          loadingContainer.querySelector('p')!.textContent = 'Downloading model...'
+          showLoading()
+          summarizing = true
+          break
+        case 'downloading':
+          loadingContainer.querySelector('p')!.textContent = `Downloading model... ${message.progress}%`
+          break
+        case 'downloaded':
+          console.log('Model downloaded')
+          loadingContainer.querySelector('p')!.textContent = 'Generating summary using on device AI...'
+          requestSummary(true)
           break
         default:
           console.log('Unknown status:', message.status)
