@@ -19,12 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadingContainer.classList.add('hidden')
     defaultMessage.classList.add('hidden')
     summaryContent.classList.remove('hidden')
-    const summaryList = summary.replaceAll('* ', '').split('\n')
-    summaryList.map((item) => {
-      const li = document.createElement('li')
-      li.textContent = item
-      summaryText.appendChild(li)
-    })
+    summaryText.textContent = summary
     currentSummary = summary
     summarizing = false
   }
