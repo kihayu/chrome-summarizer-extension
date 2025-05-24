@@ -30,7 +30,6 @@ h1 {
 
 h2 {
   color: var(--md-on-surface-variant);
-  margin-bottom: 12px;
   font-size: 1.25rem;
   font-weight: 500;
 }
@@ -182,15 +181,17 @@ button:active:before {
   margin: 0 0 16px 0;
 }
 
-#summary-text ul,
-#summary-text ol {
-  margin-top: 0;
-  margin-bottom: 16px;
-  padding-left: 24px;
+ul#summary-text {
+  margin: 24px 0 0 0;
+  padding-left: 34px;
 }
 
 #summary-text li {
-  margin-bottom: 8px;
+  margin-top: 8px;
+}
+
+#summary-text li:first-child {
+  margin-top: 0;
 }
 
 #summary-text strong,
@@ -268,7 +269,6 @@ button:active:before {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
 }
 
 .chip {
@@ -287,19 +287,27 @@ button:active:before {
   box-shadow: var(--md-elevation-1);
 }
 
-#length-options {
+#options {
   margin: 16px 0;
   padding: 16px;
   background-color: var(--md-surface-container-low);
   border-radius: 16px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 16px;
   box-shadow: var(--md-elevation-1);
   transition: all var(--md-transition-standard);
 }
 
-#length-options label {
+#length-options,
+#style-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#length-options label,
+#style-options label {
   color: var(--md-on-surface-variant);
   font-weight: 500;
   font-size: 14px;

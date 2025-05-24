@@ -3,14 +3,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const defaultMessage = document.getElementById('default-message') as HTMLDivElement
   const loadingContainer = document.getElementById('loading-container') as HTMLDivElement
   const summaryContent = document.getElementById('summary-content') as HTMLDivElement
-  const summaryText = document.getElementById('summary-text') as HTMLUListElement
-  const lengthOptions = document.getElementById('length-options') as HTMLDivElement
+  const options = document.getElementById('options') as HTMLDivElement
   const lengthSelect = document.getElementById('length-select') as HTMLSelectElement
+  const styleSelect = document.getElementById('style-select') as HTMLSelectElement
+  let summaryText = document.getElementById('summary-text') as HTMLElement
 
   let summarizing = false
+  let bulletPointText = ''
+  let bulletPoints: Array<string> = []
+  let bulletHTML: HTMLLIElement = document.createElement('li')
 
   const showLoading = () => {
     summaryText.textContent = ''
+    bulletPointText = ''
+    bulletPoints = []
+    bulletHTML = document.createElement('li')
     defaultMessage.classList.add('hidden')
     summaryContent.classList.add('hidden')
     loadingContainer.classList.remove('hidden')
@@ -21,10 +28,39 @@ document.addEventListener('DOMContentLoaded', () => {
     loadingContainer.classList.add('hidden')
     defaultMessage.classList.add('hidden')
     summaryContent.classList.remove('hidden')
-    lengthOptions.classList.remove('hidden')
+    options.classList.remove('hidden')
   }
 
-  const updateSummary = (chunk: string) => {
+  const updateSummary = (chunk: string, cached = false) => {
+    if (styleSelect.value === 'key-points') {
+      if (cached) {
+        bulletPoints = chunk.split('\n')
+        bulletPoints.forEach((point) => {
+          const li = document.createElement('li')
+          li.textContent = point
+          summaryText.appendChild(li)
+        })
+        return
+      }
+
+      if (chunk === '*') {
+        if (bulletPointText.trim().length > 0) {
+          const formattedText = bulletPointText
+          bulletPoints.push(formattedText)
+          bulletHTML = document.createElement('li')
+        }
+
+        bulletPointText = ''
+        summaryText.append(bulletHTML)
+      }
+      bulletPointText += chunk
+      const excludedSymbols = ['\n', '*', ' ']
+      if (!excludedSymbols.includes(chunk)) {
+        bulletHTML.append(chunk)
+      }
+      return
+    }
+
     summaryText.append(chunk)
   }
 
@@ -32,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadingContainer.classList.add('hidden')
     summaryContent.classList.add('hidden')
     defaultMessage.classList.remove('hidden')
-    lengthOptions.classList.add('hidden')
+    options.classList.add('hidden')
     summarizing = false
   }
 
@@ -69,7 +105,10 @@ document.addEventListener('DOMContentLoaded', () => {
       ) {
         console.log('Showing cached summary')
         summaryText.textContent = ''
-        updateSummary(localStorage.getItem('summary')!)
+        const cachedSummary = localStorage.getItem('summary')
+        console.log('localStorage.cachedSummary')
+        console.log(typeof cachedSummary)
+        updateSummary(cachedSummary!, true)
         showSummary()
         summarizing = false
         return
@@ -77,7 +116,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       chrome.tabs.sendMessage(
         activeTab.id,
-        { action: 'getSummary', url: activeTab.url, length: lengthSelect.value },
+        {
+          action: 'getSummary',
+          url: activeTab.url,
+          length: lengthSelect.value,
+          style: styleSelect.value,
+        },
         (response) => {
           if (chrome.runtime.lastError || !response) {
             console.log('Failed to get summary')
@@ -109,6 +153,8 @@ document.addEventListener('DOMContentLoaded', () => {
           localStorage.setItem('summary', summaryText.innerText)
           localStorage.setItem('url', message.url)
           summarizing = false
+          bulletPoints.push(bulletPointText)
+          console.log(bulletPoints)
           break
         case 'add_chunk':
           console.log('Adding summary chunk')
@@ -176,7 +222,25 @@ document.addEventListener('DOMContentLoaded', () => {
     requestSummary(true)
   })
 
-  lengthSelect.value = localStorage.getItem('summaryLength') || 'medium'
+  const setSummaryTextElement = () => {
+    const tag = styleSelect.value === 'key-points' ? 'ul' : 'p'
+    const tempContainer = document.createElement(tag)
+    tempContainer.id = 'summary-text'
+    tempContainer.classList.add('summary-box')
+    summaryContent.replaceChild(tempContainer, summaryText)
+    summaryText = tempContainer
+  }
 
+  styleSelect.addEventListener('change', () => {
+    console.log('Summary style changed to:', styleSelect.value)
+    localStorage.setItem('summaryStyle', styleSelect.value)
+    setSummaryTextElement()
+    requestSummary(true)
+  })
+
+  lengthSelect.value = localStorage.getItem('summaryLength') || 'medium'
+  styleSelect.value = localStorage.getItem('summaryStyle') || 'tl;dr'
+
+  setSummaryTextElement()
   requestSummary()
 })

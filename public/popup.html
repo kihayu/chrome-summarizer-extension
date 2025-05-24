@@ -1,48 +1,57 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Article Summarizer</title>
-  <link rel="stylesheet" href="styles/popup.css">
-</head>
-<body>
-  <div class="container">
-    <h1>Article Summarizer</h1>
-    <div id="summary-container">
-      <div id="loading-container" class="hidden fade-in">
-        <div class="loader"></div>
-        <p id="loading-text">Generating summary using on device AI...</p>
-      </div>
-
-      <div id="default-message" class="message-box fade-in">
-        <span class="material-symbols-rounded icon-primary">description</span>
-        <p>Navigate to an article page and the extension will generate a summary for you.</p>
-      </div>
-
-      <div id="summary-content" class="hidden fade-in">
-        <div class="summary-header">
-          <h2>Summary</h2>
-          <div class="chip">AI Generated</div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Article Summarizer</title>
+    <link rel="stylesheet" href="styles/popup.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Article Summarizer</h1>
+      <div id="summary-container">
+        <div id="loading-container" class="hidden fade-in">
+          <div class="loader"></div>
+          <p id="loading-text">Generating summary using on device AI...</p>
         </div>
-        <div id="summary-text" class="summary-box"></div>
+
+        <div id="default-message" class="message-box fade-in">
+          <span class="material-symbols-rounded icon-primary">description</span>
+          <p>Navigate to an article page and the extension will generate a summary for you.</p>
+        </div>
+
+        <div id="summary-content" class="hidden fade-in">
+          <div class="summary-header">
+            <h2>Summary</h2>
+            <div class="chip">AI Generated</div>
+          </div>
+          <div id="summary-text" class="summary-box"></div>
+        </div>
       </div>
-    </div>
 
-    <div id="length-options" class="hidden fade-in">
-      <label for="length-select">Summary Length:</label>
-      <select id="length-select">
-        <option value="short">Short</option>
-        <option value="medium">Medium</option>
-        <option value="long">Long</option>
-      </select>
-    </div>
+      <div id="options" class="hidden fade-in">
+        <div id="length-options">
+          <label for="length-select">Summary Length:</label>
+          <select id="length-select">
+            <option value="short">Short</option>
+            <option value="medium">Medium</option>
+            <option value="long">Long</option>
+          </select>
+        </div>
+        <div id="style-options">
+          <label for="style-select">Summary Style:</label>
+          <select id="style-select">
+            <option value="tl;dr">Text</option>
+            <option value="key-points">Bullet Points</option>
+          </select>
+        </div>
+      </div>
 
-    <button id="refreshButton">
-      <span class="material-symbols-rounded">refresh</span>
-      Refresh Summary
-    </button>
-  </div>
-  <script src="popup.js"></script>
-</body>
+      <button id="refreshButton">
+        <span class="material-symbols-rounded">refresh</span>
+        Refresh Summary
+      </button>
+    </div>
+    <script src="popup.js"></script>
+  </body>
 </html>
