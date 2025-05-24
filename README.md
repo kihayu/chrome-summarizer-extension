@@ -19,7 +19,6 @@ This API is currently in preview, which means it may change before the stable re
 
 - Built with [Bun](https://bun.sh)
 - Written in TypeScript
-- Real-time updates with watch mode
 - Local summarization using on device AI model
 - Summarization length selection
 

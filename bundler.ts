@@ -1,9 +1,5 @@
 import fs from 'fs'
 import path from 'path'
-import { watch } from 'fs/promises'
-
-const args = process.argv.slice(2)
-const watchMode = args.includes('--watch')
 
 const sourceDir = path.join(import.meta.dir, 'src')
 const publicDir = path.join(import.meta.dir, 'public')
@@ -74,33 +70,4 @@ async function runBuild() {
   }
 }
 
-async function watchFiles() {
-  console.log('👀 Watching for changes in src/ and public/ directories...')
-
-  const srcWatcher = watch(sourceDir, { recursive: true })
-  for await (const event of srcWatcher) {
-    if (event.filename && event.filename.endsWith('.ts')) {
-      console.log(`🔄 Source file changed: ${event.filename}`)
-      await runBuild()
-    }
-  }
-
-  const publicWatcher = watch(publicDir, { recursive: true })
-  for await (const event of publicWatcher) {
-    if (event.filename) {
-      console.log(`🔄 Public file changed: ${event.filename}`)
-      await runBuild()
-    }
-  }
-}
-
-const success = await runBuild()
-
-if (watchMode && success) {
-  watchFiles().catch((error) => {
-    console.error('Watcher error:', error)
-    process.exit(1)
-  })
-} else if (!success) {
-  process.exit(1)
-}
+await runBuild()

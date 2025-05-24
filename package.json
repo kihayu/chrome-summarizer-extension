@@ -17,7 +17,7 @@
   "private": true,
   "scripts": {
     "build": "bun run bundler.ts",
-    "dev": "bun run build --watch",
+    "dev": "bun run --watch bundler.ts",
     "lint": "eslint . --ext .ts && prettier --check 'src/**/*.{ts,tsx}'",
     "lint:fix": "eslint . --ext .ts --fix && prettier --write 'src/**/*.{ts,tsx}'"
   },
