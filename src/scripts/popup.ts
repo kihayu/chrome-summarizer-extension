@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (chunk === '*') {
         if (bulletPointText.trim().length > 0) {
-          const formattedText = bulletPointText
+          const formattedText = bulletPointText.replaceAll('*', '')
           bulletPoints.push(formattedText)
           bulletHTML = document.createElement('li')
         }
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
         summaryText.append(bulletHTML)
       }
       bulletPointText += chunk
-      const excludedSymbols = ['\n', '*', ' ']
+      const excludedSymbols = ['\n', '*']
       if (!excludedSymbols.includes(chunk)) {
         bulletHTML.append(chunk)
       }
