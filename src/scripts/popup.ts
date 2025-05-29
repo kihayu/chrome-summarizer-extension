@@ -98,17 +98,17 @@ document.addEventListener('DOMContentLoaded', () => {
         return
       }
 
-      if (
-        !refresh &&
-        localStorage.getItem('summary') &&
-        localStorage.getItem('url') === activeTab.url
-      ) {
+      const cachedSummary = (
+        JSON.parse(localStorage.getItem('summaries') || '[]') as Array<Summary>
+      ).find((summary: Summary) => summary.url === activeTab.url)
+
+      if (!refresh && cachedSummary !== undefined) {
         console.log('Showing cached summary')
         summaryText.textContent = ''
-        const cachedSummary = localStorage.getItem('summary')
-        console.log('localStorage.cachedSummary')
-        console.log(typeof cachedSummary)
-        updateSummary(cachedSummary!, true)
+
+        lengthSelect.value = cachedSummary.length || 'medium'
+        styleSelect.value = cachedSummary.style || 'tl;dr'
+        updateSummary(cachedSummary.summary, true)
         showSummary()
         summarizing = false
         return
@@ -150,8 +150,24 @@ document.addEventListener('DOMContentLoaded', () => {
         case 'complete':
           console.log('Showing summary, hiding loader')
           sendResponse({ received: true })
-          localStorage.setItem('summary', summaryText.innerText)
-          localStorage.setItem('url', message.url)
+
+          const storedSummaries: Array<Summary> = JSON.parse(
+            localStorage.getItem('summaries') || '[]'
+          )
+          const summary: Summary = {
+            summary: summaryText.innerText,
+            url: message.url,
+            length: lengthSelect.value as 'short' | 'medium' | 'long',
+            style: styleSelect.value as 'tl;dr' | 'key-points',
+          }
+          const existingSummary = storedSummaries.find((s: Summary) => s.url === summary.url)
+          if (existingSummary) {
+            storedSummaries.splice(storedSummaries.indexOf(existingSummary), 1)
+          }
+
+          storedSummaries.push(summary)
+          localStorage.setItem('summaries', JSON.stringify(storedSummaries))
+
           summarizing = false
           bulletPoints.push(bulletPointText)
           console.log(bulletPoints)

@@ -7,7 +7,7 @@ import globals from 'globals'
 // Create a basic config
 export default [
   {
-    ignores: ['**/node_modules/**', '**/dist/**', '**/*.js']
+    ignores: ['**/node_modules/**', '**/dist/**', '**/*.js'],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
@@ -19,7 +19,7 @@ export default [
       sourceType: 'module',
       parser: tseslint.parser,
       parserOptions: {
-        project: './tsconfig.json'
+        project: './tsconfig.json',
       },
       globals: {
         ...globals.browser,
@@ -34,11 +34,11 @@ export default [
         Bun: true,
         SummarizerConstructor: true,
         Summarizer: true,
-        TurndownService: true
-      }
+        Summary: true,
+      },
     },
     plugins: {
-      '@typescript-eslint': tseslint.plugin
+      '@typescript-eslint': tseslint.plugin,
     },
     rules: {
       'prettier/prettier': 'error',
@@ -47,7 +47,7 @@ export default [
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
       'no-console': 'off',
       'no-case-declarations': 'off',
-      'no-undef': 'error'
-    }
-  }
+      'no-undef': 'error',
+    },
+  },
 ]
