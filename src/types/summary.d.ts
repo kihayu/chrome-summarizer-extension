@@ -1,6 +1,6 @@
 interface Summary {
   url: string
   summary: string
-  style: 'tl;dr' | 'key-points'
+  style: 'tldr' | 'key-points'
   length: 'short' | 'medium' | 'long'
 }

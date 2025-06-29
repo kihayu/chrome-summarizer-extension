@@ -1,6 +1,6 @@
 interface SummarizerOptions {
   sharedContext?: string
-  type?: 'tl;dr' | 'teaser' | 'key-points' | 'headline'
+  type?: 'tldr' | 'teaser' | 'key-points' | 'headline'
   format?: 'plain-text' | 'markdown'
   length?: 'short' | 'medium' | 'long'
   monitor?: (m: Summarizer) => void

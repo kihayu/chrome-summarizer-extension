@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
         summaryText.textContent = ''
 
         lengthSelect.value = cachedSummary.length || 'medium'
-        styleSelect.value = cachedSummary.style || 'tl;dr'
+        styleSelect.value = cachedSummary.style || 'tldr'
         updateSummary(cachedSummary.summary, true)
         showSummary()
         summarizing = false
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
             summary: summaryText.innerText,
             url: message.url,
             length: lengthSelect.value as 'short' | 'medium' | 'long',
-            style: styleSelect.value as 'tl;dr' | 'key-points',
+            style: styleSelect.value as 'tldr' | 'key-points',
           }
           const existingSummary = storedSummaries.find((s: Summary) => s.url === summary.url)
           if (existingSummary) {
@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
   lengthSelect.value = localStorage.getItem('summaryLength') || 'medium'
-  styleSelect.value = localStorage.getItem('summaryStyle') || 'tl;dr'
+  styleSelect.value = localStorage.getItem('summaryStyle') || 'tldr'
 
   setSummaryTextElement()
   requestSummary()

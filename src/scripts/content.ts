@@ -54,7 +54,7 @@ async function generateSummary(url: string, length: string, style: string) {
 
     const options = {
       sharedContext: 'This is a scientific article',
-      type: style as 'tl;dr' | 'key-points',
+      type: style as 'tldr' | 'key-points',
       format: 'markdown' as const,
       length: length as 'short' | 'medium' | 'long',
     }
